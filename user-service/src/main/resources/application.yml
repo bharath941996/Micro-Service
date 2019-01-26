@@ -1,0 +1,21 @@
+server:
+    port:8909
+
+
+
+
+spring:
+    application:
+        name: userservice
+
+user:
+- null
+-   id: 12
+    name: Deb
+    pass: 12
+-   id: 23
+    name: Kings
+    pass: 675
+-   id: 35
+    name: Kaus
+    pass: qwe

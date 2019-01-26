@@ -1,0 +1,139 @@
+version : "3"
+services:
+#  mongo:
+#    image: mongo
+#    ports:
+#      - "27017:27017"
+#    container_name: mongo
+#    network_mode: host
+
+  eureka-service:
+
+    build: eureka-service/
+    restart: always
+    network_mode: host
+    container_name: eureka-service-docker
+    ports:
+      - 9091:9091
+    expose:
+      - 9091
+
+  config-server:
+
+    build: configserver/
+    restart: always
+    network_mode: host
+    container_name: config-server-docker
+    ports:
+      - 8066:8066
+    expose:
+      - 8066
+  track-service:
+
+    build: track-service/
+    restart: always
+    network_mode: host
+    hostname: localhost
+    container_name: track-service-docker
+    depends_on:
+      - config-server
+      - eureka-service
+
+    ports:
+      - 8999:8999
+    expose:
+      - 8999
+  userservice:
+
+    build: user-service/
+    restart: always
+    network_mode: host
+    container_name: user-service-docker
+    depends_on:
+      - config-server
+      - eureka-service
+    ports:
+      - 8909:8909
+    expose:
+      - 8909
+  zuul-service:
+
+    build: zuul-service/
+    restart: always
+    network_mode: host
+    container_name: zuul-service-docker
+
+    ports:
+      - 8085:8085
+    expose:
+      - 8085
+
+
+#  config-spring:
+#    image: configservice-app:latest
+#    build: configserver/
+#    restart: always
+#    network_mode: host
+#    depends_on:
+#      - mongo
+#      - eureka-spring
+#    ports:
+#      - "8082:8082"
+#    expose:
+#      - 8082
+#
+#  eureka-spring:
+#    image: eureka-service-app
+#    build: eureka-service/
+#    restart: always
+#    network_mode: host
+#  container_name: eureka-service-docker
+#      ports:
+#      - "8184:8184"
+#    expose:
+#      - 8184
+#
+#  track-spring:
+#    image: track-service-app
+#    build: track-service/
+#    restart: always
+#    network_mode: host
+#container_name: track-service-docker
+#    depends_on:
+#      - mongo
+#      - config-spring
+#      - eureka-spring
+#      - zuul-spring
+#    ports:
+#      - "8181:8181"
+#    expose:
+#      - 8181
+#
+#  user-spring:
+#    image: userservice-app
+#    build: user-service/
+#    restart: always
+#    network_mode: host
+# container_name: user-service-docker
+#    depends_on:
+#      - mongo
+#      - config-spring
+#      - eureka-spring
+#      - zuul-spring
+#    ports:
+#      - "8184:8184"
+#    expose:
+#      - 8184
+#
+#  zuul-spring:
+#    image: zuul-service-app
+#    build: zuul-service/
+#    restart: always
+#    network_mode: host
+##container_name: zuul-spring-docker
+#    depends_on:
+#      - mongo
+#    ports:
+#      - "8185:8185"
+#    expose:
+#      - 8082
